@@ -9,6 +9,7 @@ EPSILON = 0.5
 class BudgetTracker:
   # The privacy budget we start with.
   def __init__(self, budget):
+    self.budget = budget
     pass
 
   # Every time a query is made, this function is called.
@@ -18,7 +19,11 @@ class BudgetTracker:
   def check_and_update_budget(self):
     # TODO: implement budget check.
     # TODO: update budget if check succeeds.
-    raise ValueError("Out of budget")
+    if self.budget >= EPSILON:
+      self.budget -= EPSILON
+      return True
+    else:         
+      raise ValueError("Out of budget")
   
   def avg(self, group_by, averaged_column):
     self.check_and_update_budget()    

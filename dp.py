@@ -1,19 +1,20 @@
 from client import count, _pretty_print
 from matplotlib import pyplot
-
+import numpy as np
 import sys
 
 # Return a random sample from laplace with mean/loc = mu and scale/spread b.
 def laplace(mu, b):
   # TODO: implement laplace sampling or use numpy's laplace.
-  return "?"
+  l=np.random.laplace(loc=mu, scale=b)
+  return l
 
 # Return a noised histogram that is epsilon-dp.
 def dp_histogram(epsilon):
   # TODO: Find out the parameters for the noise distribution.
-  sensitivity = "?"
-  mu = "?"
-  b = "?"
+  sensitivity = 1
+  mu = 0
+  b = sensitivity/epsilon
   
   # Get the exact histogram without noise.
   headers, rows = count(["age", "music"], False)
@@ -23,7 +24,10 @@ def dp_histogram(epsilon):
   for (age, music, value) in rows:
     # TODO: compute the noised value.
     # TODO: round the noised_value to the closest integer.
-    noised_value = "?"
+    laplace_noise = laplace(mu, b)
+    noised_value = value + laplace_noise
+
+    noised_value = round(noised_value)
 
     # Append the noised value and associated group by labels.
     noised_rows.append((age, music, noised_value))  
@@ -65,8 +69,8 @@ if __name__ == "__main__":
   _pretty_print(headers, rows)
 
   # Plotting code.
-  '''
+  
   print("Plotting, this may take a minute ...")
   plot(epsilon)
   print("Plot saved at 'dp-plot.png'")
-  '''
+  
